@@ -12,7 +12,13 @@ class App extends Component {
             {name: "Maximillian", age: 86}
         ],
         username: 'TaskUserName',
-        showPersons: true
+        showPersons: true,
+        events: [
+            {name: 'Event 1', id: 1},
+            {name: 'Event 2', id: 2},
+            {name: 'Event 3', id: 3}
+
+        ]
     }
     eventListen = (newName) => {
         {/*Merge with the existing Persons Array*/
@@ -35,9 +41,18 @@ class App extends Component {
         })
     }
 
+    deleteEvents = (eventIndex) => {
+        const events = [...this.state.events];
+        events.splice(eventIndex,1);
+        this.setState({events :events});
+        {/*console.log(events);*/}
+
+    }
+
     render() {
         let persons = null;
-        if( this.state.showPersons ) {
+        let events = null;
+        if (this.state.showPersons) {
             persons = (
                 <div>
                     <TestParas/>
@@ -48,6 +63,11 @@ class App extends Component {
                 </div>
             );
         }
+
+        events = this.state.events.map((eventObj,index) => {
+            return <Profile name={eventObj.name} deleteEvents = {this.deleteEvents.bind(this,index)}/>
+        })
+
         return (
             <div className="App">Hello Aparna
                 <header className="App-header">
@@ -57,7 +77,8 @@ class App extends Component {
                 <p className="App-intro">
                     To get started, edit <code>src/App.js</code> and save to reload.
                 </p>
-                <Profile name={this.state.persons[0].name}/>
+                {events}
+                {/*<Profile name={this.state.persons[0].name}/>*/}
                 <button onClick={this.eventListen.bind(this, "Stephannie")}>Click Me</button>
                 {/*below one is a little inefficient*/}
                 <button onClick={() => this.eventListen('SecondWayMax!')}>Click Me Part 2</button>

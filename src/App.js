@@ -5,6 +5,7 @@ import Profile from './Profile';
 import UserInput from './UserInput/UserInput'
 import UserOutput from './UserOutput/UserOutput'
 import TestParas from './TestParas'
+import ValidationComponent from './ValidationComponent'
 
 class App extends Component {
     state = {
@@ -18,7 +19,8 @@ class App extends Component {
             {name: 'Event 2', id: 2},
             {name: 'Event 3', id: 3}
 
-        ]
+        ],
+        characterCount: null
     }
     eventListen = (newName) => {
         {/*Merge with the existing Persons Array*/
@@ -43,10 +45,16 @@ class App extends Component {
 
     deleteEvents = (eventIndex) => {
         const events = [...this.state.events];
-        events.splice(eventIndex,1);
-        this.setState({events :events});
-        {/*console.log(events);*/}
+        events.splice(eventIndex, 1);
+        this.setState({events: events});
+        {/*console.log(events);*/
+        }
 
+    }
+    characterCount = (event) => {
+        this.setState({
+            characterCount: event.target.value.length
+        })
     }
 
     render() {
@@ -64,8 +72,13 @@ class App extends Component {
             );
         }
 
-        events = this.state.events.map((eventObj,index) => {
-            return <Profile name={eventObj.name} deleteEvents = {this.deleteEvents.bind(this,index)}/>
+        events = this.state.events.map((eventObj, index) => {
+            return <Profile name={eventObj.name} deleteEvents={this.deleteEvents.bind(this, index)} key={eventObj.id}/>
+            {
+                /*Inorder for React to identify which portion of list in DOM - react has to update in comparison with
+                Virtual DOM then pass a key to it
+                */
+            }
         })
 
         return (
@@ -78,7 +91,7 @@ class App extends Component {
                     To get started, edit <code>src/App.js</code> and save to reload.
                 </p>
                 {events}
-                {/*<Profile name={this.state.persons[0].name}/>*/}
+                <Profile name={this.state.persons[0].name}/>
                 <button onClick={this.eventListen.bind(this, "Stephannie")}>Click Me</button>
                 {/*below one is a little inefficient*/}
                 <button onClick={() => this.eventListen('SecondWayMax!')}>Click Me Part 2</button>
@@ -105,6 +118,14 @@ class App extends Component {
                 {/* Another Method to do this Operation*/}
 
                 {persons}
+                {
+                    /*
+                    Assignment 2
+                     */
+                }
+                <input onChange={this.characterCount}/>
+                <p>Character Count : {this.state.characterCount}</p>
+                <ValidationComponent characterCount={this.state.characterCount}/>
 
             </div>
         );
